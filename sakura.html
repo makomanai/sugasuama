@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <nav>
@@ -86,8 +87,8 @@ let canvas_mouse_event = false; //スイッチ [ true=線を引く, false=線は
     }
      
     function flow_start(){
-      setImagas();
-      setInterval(flow,10);
+    //   setImagas();
+    //   setInterval(flow,10);
     }
 
     $(canvas).on("mousedown",function(e){
