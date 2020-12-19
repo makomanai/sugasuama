@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>canvas_base.html</title>
+</head>
+
+<body>
+
+
+    <section>
+
+
+        <nav>
+            <!-- 線の色を変更するHTML要素 -->
+            <input type="color"  id="color" value="">
+            <!-- 線の太さを変更するHTML要素 -->
+            <input type="range" id="range" min="1" max="100" value="">
+            
+            <button id="clear_btn">クリアー</button>
+        </nav>
+        <div class="layer-wrap" id="demo3">
+        <canvas id="cvs" width="800" height="500" style="border:1px solid blue; background-color: rgb(255, 250, 250);"></canvas>
+        <!--<canvas id="cvs2" width="500" height="500" styke="border:1px solid bule;"></canvas>
+        <canvas id="cvs3" width="500" height="500" styke="border:1px solid bule;"></canvas>
+        </div>-->
+
+        <!--<input type="radio" name="mode" value="1">レイヤー
+        <label><input type="radio" name="mode" value="2">レイヤー2</label>
+        <label><input type="radio" name="mode" value="3" checked>レイヤー3</label>
+        <div className="App">
+        </div>
+        <input type="button" value="clear" id="clear">-->
+        <a id="download" href="#" download="canvas.jpg">ダウンロード</a>
+        <div id="result"><img src=""></div>
+        
+    </section>
+
+
+
+
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script>
+//テスト
+
+
+
+//
+
+
+        //初期化(変数letで宣言)
+        let canvas_mouse_event = false; //スイッチ [ true=線を引く, false=線は引かない ]  ＊＊＊
+        let oldX = 0;      //１つ前の座標を代入するための変数
+        let oldY = 0;     //１つ前の座標を代入するための変数
+        let bold_line = "3"; //ラインの太さをここで指定
+        let color = ""; //ラインの色をここで指定
+
+        //------------------------------------------------
+        //const can = $("#drowarea")[0]; //CanvasElement
+        //const ctx = can.getContext("2d"); //描画するための準備！
+        //------------------------------------------------
+        //上2つのスクリプトを記述します。
+        const can = $("canvas")[0]; //CanvasElement
+        const ctx = can.getContext("2d"); //描画するための準備！
+        
+//test drop snow
+ // canvasを画像で保存
+ var canvas = document.getElementById("cvs");
+// //var ctx = canvas.getContext("2d");
+// var imgCnt = 25;          // 描画する画像の数
+// var aryImg = [];          // 画像の情報を格納
+// var cvsw = 800;           // canvasタグに指定したwidth
+// var cvsh = 500;           // canvasタグに指定したheight
+// var imgBaseSizeW = 15;    // 画像の基本サイズ横幅
+// var imgBaseSizeH = 18.5;  // 画像の基本サイズ立幅
+// var aspectMax = 1.5;      // アスペクト比計算時の最大値
+// var aspectMin = 0.5;      // アスペクト比計算時の最小値
+// var speedMax = 2;         // 落下速度の最大値
+// var speedMin = 0.5;       // 落下速度の最小値
+// var angleAdd = 4;         // 画像角度への加算値
+ 
+// // 画像の読み込み
+// var img = new Image();
+// img.src ="sapporo.png"
+// img.src = "";
+// img.onload = flow_start;
+ 
+// 画像のパラメーターを設定
+// function setImagas(){
+//   var aspect = 0;
+//   for(var i = 0;i < imgCnt;i++){
+//     // 画像サイズに掛けるアスペクト比を0.5~1.5倍でランダムで生成
+//     aspect = Math.random()*(aspectMax-aspectMin)+aspectMin;
+//     aryImg.push({
+//       "posx": Math.random()*cvsw,   // 初期表示位置x
+//       "posy": Math.random()*cvsh,   // 初期表示位置y
+//       "sizew": imgBaseSizeW*aspect, // 画像の横幅
+//       "sizeh": imgBaseSizeH*aspect, // 画像の縦幅
+//       "speedy": Math.random()*(speedMax-speedMin)+speedMin,　// 画像が落ちていく速度
+//       "angle": Math.random()*360,   // 角度
+//     });
+//   }
+// }
+ 
+// // 描画、パラメーターの更新
+// var idx = 0;
+// var cos = 0;
+// var sin = 0;
+// var rad = Math.PI / 180;
+// function flow(){
+//   ctx.clearRect(0,0,cvsw,cvsh);
+//   for(idx = 0;idx < imgCnt;idx++){
+//     aryImg[idx].posy += aryImg[idx].speedy;
+//     aryImg[idx].angle += Math.random()*angleAdd;
+//     cos = Math.cos(aryImg[idx].angle * rad);
+//     sin = Math.sin(aryImg[idx].angle * rad);
+//     ctx.setTransform(cos, sin, sin, cos, aryImg[idx].posx, aryImg[idx].posy);
+//     ctx.drawImage(img, 0, 0 , aryImg[idx].sizew , aryImg[idx].sizeh);
+//     ctx.setTransform(1, 0, 0, 1, 0, 0);
+//     // 範囲外に描画された画像を上に戻す
+//     if(aryImg[idx].posy >= cvsh){
+//       aryImg[idx].posy = -aryImg[idx].sizeh;
+//     }
+//   }
+// }
+ 
+// function flow_start(){
+//   setImagas();
+//   setInterval(flow,10);
+// }
+
+
+
+        //カラー指定
+        ctx.fillStyle = "#ffffff";
+        //fontサイズ、書式
+        ctx.font = "20px _sans";
+        //文字の設置位置
+        ctx.textBaseline = "top"; //top,middle,bottom...
+        //表示文字と座標
+        var canvas = document.getElementById("cvs"),
+    textarea = null;
+
+
+    // canvas.addEventListener('click', function(e) {
+    // if(!textarea) {
+    //     textarea = document.createElement('textarea');
+    //     textarea.className = 'info';
+    //     document.body.appendChild(textarea);
+    // }
+    // var x = e.clientX - canvas.offsetLeft,
+    // y = e.clientY - canvas.offsetTop;
+    // var t=textarea.value = ("");
+    // console.log(t)
+    // textarea.style.position = 'absolute';
+    // textarea.style.top = e.clientY + 'px';
+    // textarea.style.left = e.clientX + 'px';
+    // document.getElementById("textarea").value;
+
+    // }, false);
+    
+
+    //     ctx.fillText(t, 10, 100); //ctx.fillText(文字列,x,y)
+    //     ctx.fillText("Hello World!", 50, 200); //ctx.fillText(文字列,x,y)
+
+
+
+
+        //mousedown：フラグをTrue
+        //-----------------------------------------------
+        //oldX = e.offsetX;       //MOUSEDOWNしたX横座標取得
+        //oldY = e.offsetY; //MOUSEDOWN Y高さ座標取得
+        //canvas_mouse_event=true;
+        //-----------------------------------------------
+        //上5つのスクリプトを記述します。
+        $(can).on("mousedown",function(e){
+            console.log(e);
+            oldX=e.offsetX;//現在地点をXをoldに代入
+            oldY=e.offsetY;//onaji 
+            canvas_mouse_event=true; //書くぞー！！
+
+        });
+
+        //mousemove：フラグがTrueだったら描く ※e：イベント引数取得
+        //----------------------------------------------
+         if(canvas_mouse_event==true){
+             const px = e.offsetX;
+             const py = e.offsetY;
+             ctx.strokeStyle = color;
+             ctx.lineWidth = bold_line;
+             ctx.beginPath();
+             ctx.lineJoin= "round";
+             ctx.lineCap = "round";
+             ctx.moveTo(oldX, oldY);
+             ctx.lineTo(px, py);
+             ctx.stroke();
+             oldX = px;
+             oldY = py;
+         }
+
+
+            
+
+            $(can).on("mousemove",function(e){
+                if(canvas_mouse_event==true){
+             const px = e.offsetX;//現在地点x
+             const py = e.offsetY;//現在地y
+             ctx.strokeStyle = color;
+             ctx.lineWidth = bold_line;
+             ctx.beginPath();
+             ctx.lineJoin= "round";
+             ctx.lineCap = "round";
+             ctx.moveTo(oldX, oldY);
+             ctx.lineTo(px, py);
+             ctx.stroke();
+             oldX = px; //入れ替え
+             oldY = py; //入れ替え                   
+                }
+            });
+
+
+
+        //mouseup：フラグをfalse
+        //------------------------------------------------
+        //    canvas_mouse_event=false;
+        //------------------------------------------------
+            $(can).on("mouseup",function(){
+                canvas_mouse_event=false;
+            });
+
+        //#clear_btn：クリアーボタンAction
+        //-----------------------------------------------------------------
+        //    ctx.beginPath();
+        //    ctx.clearRect(0, 0, can.width, can.height);
+        //-----------------------------------------------------------------
+        $("#clear_btn").on("click",function(){
+         ctx.beginPath();
+         ctx.clearRect(0, 0, can.width, can.height); 
+        });//kesigom size-10+10とか
+        $(can).on("mouseout",function(){
+                canvas_mouse_event=false;
+            });
+        $("#color").on("change",function(){
+        const c =$(this).val();//色値の取得
+        //$("#echo").html(c);
+        color=c;
+            
+        });
+
+        $("#range").on("change",function(){
+        const r =$(this).val();//スライダーの値を取得　o
+        //$("#echo").html(r);
+        bold_line=r;
+        });
+//試し
+// var numLayers =$('#demo').children('canvas').length,
+//         aryCvs = [];
+// $('[name=mode][value='+numLayers+ ']').prop('checked',true);
+
+// for(var i=i; i<=numLayers; i++){
+// //各レイヤーの初期化とid負荷
+// aryCvs[i-1]=new fabricCanvas('cvs'+i);
+// $('#cvs'+1).parent('div.canvas-container').attr('id','layer'+i);くれい
+
+// //各レイヤーに要素生成
+// aryCvs[i-1].add(new fabric.Text(    
+// i+'',{
+//         fontFamily:'Meyrio',
+//         fontsSize:72,
+//         fill:'blue',
+//         textBackgroundColor:'lightblue',
+//         left:80*i-20,
+//         top:50*i-20
+
+//     }));
+
+
+// }
+// //--------レイヤー切替----------//
+// $('[name=mode]').click(function(){
+// var n= $('#demo3').children('div.canvas-container').last().attr('id').slice(-1);
+
+// //現在のレイヤーの選択枠解除
+// aryCvs[n-1].discardActiveObject().renderAll();
+
+// //選択レイヤーを最後に移動
+// $('#demo3').append($('#layer'+$('#layer'+$('[name=mode]:checked').val)));
+// });
+
+
+
+ $("#download").click(function(){
+      canvas = document.getElementById('canvas');
+      var base64 = canvas.toDataURL("image/jpeg");
+      document.getElementById("download").href = base64;
+    });
+ 
+    function setBgColor(){
+      // canvasの背景色を設定(指定がない場合にjpeg保存すると背景が黒になる)
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0,0,cnvWidth,cnvHeight);
+    }
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+</body>
+
+</html>
